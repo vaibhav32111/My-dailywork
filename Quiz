@@ -1,0 +1,60 @@
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+class Quiz {
+    private String[] questions = {
+        "What is the capital of France?",
+        "What is 2 + 2?",
+        "Who wrote 'Hamlet'?"
+    };
+
+    private String[][] options = {
+        {"1. Berlin", "2. Madrid", "3. Paris", "4. Rome"},
+        {"1. 3", "2. 4", "3. 5", "4. 6"},
+        {"1. Charles Dickens", "2. William Shakespeare", "3. Mark Twain", "4. J.K. Rowling"}
+    };
+
+    private int[] correctAnswers = {3, 2, 2}; // Correct options
+    private int score = 0;
+
+    public void startQuiz() {
+        Scanner scanner = new Scanner(System.in);
+        Timer timer = new Timer();
+        
+        for (int i = 0; i < questions.length; i++) {
+            System.out.println("Question " + (i + 1) + ": " + questions[i]);
+            for (String option : options[i]) {
+                System.out.println(option);
+            }
+
+            final int[] timeLimit = {10}; // 10 seconds per question
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("\nTime's up!");
+                    System.exit(0);
+                }
+            };
+            timer.schedule(task, timeLimit[0] * 1000);
+
+            System.out.print("Your answer: ");
+            int answer = scanner.nextInt();
+            timer.cancel();
+
+            if (answer == correctAnswers[i]) {
+                score++;
+            }
+        }
+
+        System.out.println("Quiz over! Your score: " + score + "/" + questions.length);
+        scanner.close();
+    }
+}
+
+public class QuizApplication {
+    public static void main(String[] args) {
+        Quiz quiz = new Quiz();
+        quiz.startQuiz();
+    }
+}
